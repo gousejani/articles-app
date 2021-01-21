@@ -3,6 +3,8 @@ const router = express.Router();
 //Bring in Models
 const Article = require('../models/article')
 const User = require('../models/user')
+const Comment = require('../models/comment')
+
 
 
 
@@ -31,9 +33,10 @@ router.post('/add',
           });
 
       }else{
+          console.log(req.user);
           let article = new Article;
           article.title = req.body.title;
-          article.author = req.user._id;
+          article.author = req.user.username;
           article.body = req.body.body;
 
           article.save((err)=>{
@@ -70,7 +73,7 @@ router.post('/edit/:id',(req,res)=>{
 router.delete('/:id',(req, res) => {
     let query = { _id: req.params.id }
     Article.findById(req.params.id,(err,article)=>{
-        if(article.author!= req.user._id){
+        if(article.author!= req.user.username){
             res.status(500).send();
         }else{
             Article.remove(query,(err)=>{
@@ -89,13 +92,12 @@ router.delete('/:id',(req, res) => {
 // Get Single Article
 router.get('/:id',(req,res)=>{
   Article.findById(req.params.id,(err,article)=>{
-      User.findById(article.author,(err,user)=>{
+    Comment.find({postId:req.params.id},(err,comments)=>{
         res.render('article',{
-            article:article,
-            author:user.username
-        });
-      });
-      
+            comments:comments,
+            article:article
+        });  
+    });
   });
 })
 

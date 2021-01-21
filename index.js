@@ -114,6 +114,10 @@ app.use('/articles',articles);
 // Users
 let users = require('./routes/users');
 app.use('/users',users);
+// Comments
+let comments = require('./routes/comments');
+app.use('/comments',comments);
+
 
 // Start Server
 const PORT = process.env.PORT || 3000;

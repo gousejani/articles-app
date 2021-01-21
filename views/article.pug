@@ -2,10 +2,25 @@ extends layout
 
 block content
     h1=article.title
-    h5 Posted by #{author}
+    h5 Posted by #{article.author}
     p=article.body
     hr
     if user
-        if user.id == article.author
+        if user.username == article.author
             a.btn.btn-default.btn-secondary(href="/articles/edit/"+article._id) Edit
             a.btn.btn-default.btn-danger.delete-article(href='#',data-id=article._id) Delete
+    
+    if user
+        form(method='POST',action="/comments/add/")
+            .form-group
+                textarea.form-control(name='body')
+            .form-group
+                input(type='hidden', name = 'postId', value=article._id)
+            input.btn.btn-primary(type='submit', value='Add Comment')
+    
+    h3 Comments
+    ul.list-group
+        each comment, i in comments
+            li.list-group-item
+                p=comment.body
+                p by #{comment.username}

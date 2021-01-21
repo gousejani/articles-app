@@ -1,21 +1,36 @@
 doctype html
 html
   head
-    title Knowledge App
+    title ABTMS
     link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    link(rel='stylesheet' href='/css/style.css')
+
   body
     nav.navbar.navbar-expand-lg.navbar-light.bg-light
       .container
-        a.navbar-brand(href='#') Navbar
+        a.navbar-brand(href='#') ABTMS
         button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarNavAltMarkup' aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation')
           span.navbar-toggler-icon
         #navbarNavAltMarkup.collapse.navbar-collapse
           .navbar-nav
             a.nav-link(aria-current='page' href='/') Home
-            a.nav-link(href='/articles/add') Add Article
+            if user
+              a.nav-link(href='/articles/add') Add Article
+          .navbar-nav.navbar-right
+            if user
+              a.nav-link(href='/users/logout') Logout
+            else
+              a.nav-link(href='/users/register') Register
+              a.nav-link(href='/users/login') Login
+
+
 
 
     .container
+      != messages('message', locals)
+      if errors
+        each error, i in errors
+          div(class='alert-danger')=error.msg
       block content
       br
       hr
@@ -23,3 +38,5 @@ html
         p Copyright &copy; 2021
     script(src="/bower_components/jquery/dist/jquery.js")
     script(src="/bower_components/bootstrap/dist/js/bootstrap.js")
+    script(src="/js/main.js")
+

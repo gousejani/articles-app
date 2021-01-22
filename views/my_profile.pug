@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    h2 My Profile
+    ul.list-group
+        li.list-group-item username: #{user.username}
+        li.list-group-item email: #{user.email}
+        li.list-group-item posts: #{user.posts}
+        li.list-group-item comments: #{user.comments}
+    br
+    h3 My Posts
+    ul.list-group
+    each article, i in articles
+        li.list-group-item
+            a.font-weight-bold(href="/articles/"+article._id)=article.title 
+            //- span #{article.totalComments} Comments
+    br
+    h3 My Comments
+    ul.list-group
+    each comment, i in comments
+        li.list-group-item
+            div
+                a.font-weight-light(href="/articles/"+comment.postId)=comment.postTitle 
+            span.font-weight-bold=comment.body

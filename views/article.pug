@@ -2,7 +2,8 @@ extends layout
 
 block content
     h1=article.title
-    h5 Posted by #{article.author}
+    p Posted by 
+        a(href="/users/"+article.author) #{article.author}
     p=article.body
     hr
     if user
@@ -16,6 +17,8 @@ block content
                 textarea.form-control(name='body')
             .form-group
                 input(type='hidden', name = 'postId', value=article._id)
+            .form-group
+                input(type='hidden', name = 'postTitle', value=article.title)
             input.btn.btn-primary(type='submit', value='Add Comment')
     
     h3 Comments

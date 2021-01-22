@@ -5,5 +5,8 @@ block content
     ul.list-group
         each article, i in articles
             li.list-group-item
-                a(href="/articles/"+article._id)=article.title
-                p by #{article.author}
+                div
+                    a(href="/articles/"+article._id)=article.title
+                a(href="/users/"+article.author) #{article.author}
+                span  | 
+                span #{article.totalComments} Comments

@@ -29,7 +29,8 @@ router.post('/add',
       if(errors){
           res.render('add_article',{
               title:"Add Article",
-              errors:errors
+              errors:errors,
+              user:req.user
           });
 
       }else{
@@ -38,15 +39,19 @@ router.post('/add',
           article.title = req.body.title;
           article.author = req.user.username;
           article.body = req.body.body;
-
-          article.save((err)=>{
-              if(err){
-                  console.log(err);
-              }else{
-                  req.flash('success','Article Added');
-                  res.redirect('/');
-              }
+          article.totalComments = 0;
+          
+          User.update({username:req.user.username},{ $inc: {posts: 1}},(err)=>{
+            article.save((err)=>{
+                if(err){
+                    console.log(err);
+                }else{
+                    req.flash('success','Article Added');
+                    res.redirect('/');
+                }
+            });
           });
+          
       }
       
   });
@@ -124,4 +129,5 @@ function ensureAuthenticated(req,res,next){
         res.redirect('/users/login');
     }
 }
+
 module.exports =  router;

@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 //Bring in Models
 const User = require('../models/user');
+const Article = require('../models/article');
+const Comment = require('../models/comment');
+
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 // Register Form
@@ -15,6 +18,8 @@ router.post('/register',(req,res)=>{
     const username = req.body.username;
     const password = req.body.password;
     const password2 = req.body.password2;
+    const posts = 0;
+    const comments = 0;
 
     req.checkBody('email','Email is not valid').isEmail();
     req.checkBody('username','Username is required').notEmpty();
@@ -28,7 +33,9 @@ router.post('/register',(req,res)=>{
         let newUser = new User({
             email,
             username,
-            password
+            password,
+            posts,
+            comments
         });
         bcrypt.genSalt(10, function(err,salt){
             bcrypt.hash(newUser.password,salt,(err,hash )=>{
@@ -64,7 +71,6 @@ router.post('/login',(req,res,next)=>{
         failureRedirect:'/users/login',
         failureFlash:true
     })(req,res,next);
-    req.flash('success',"You're Logged In");
 });
 
 // Logout
@@ -73,5 +79,33 @@ router.get('/logout',(req,res)=>{
     req.flash('success',"You're Logged Out");
     res.redirect('/users/login')
 })
+
+// My Profile
+router.get('/myprofile',(req,res)=>{
+    Article.find({author:req.user.username},(err,articles)=>{
+        Comment.find({username:req.user.username},(err,comments)=>{
+            res.render('my_profile',{
+                user: req.user,
+                articles:articles,
+                comments
+            });
+        });
+    });
+});
+
+// User Profile
+router.get('/:username',(req,res)=>{
+    Article.find({author:req.params.username},(err,articles)=>{
+        Comment.find({username:req.params.username},(err,comments)=>{
+            User.find({username:req.params.username},(err,profile)=>{
+                res.render('user_profile',{
+                    profile:profile,
+                    articles,
+                    comments
+                });
+            });
+        });
+    });
+});
 
 module.exports =  router;

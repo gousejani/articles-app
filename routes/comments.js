@@ -10,7 +10,7 @@ const Comment = require('../models/comment')
 // Post Comment 
 router.post('/add',
   (req,res)=>{
-    //   console.log(req.body);
+      console.log(req.user);
       req.checkBody('body','Body is required').notEmpty();
       // get Errors
       const errors = req.validationErrors();
@@ -20,7 +20,8 @@ router.post('/add',
                     req.flash('danger',"Comment shouldn't be empty")
                     res.render('article',{
                         comments:comments,
-                        article:article
+                        article:article,
+                        user:req.user
                     });  
                 });    
           });
@@ -29,20 +30,27 @@ router.post('/add',
           comment.body = req.body.body;
           comment.username = req.user.username;
           comment.postId = req.body.postId;
+          comment.postTitle = req.body.postTitle;
 
           comment.save((err)=>{
               if(err){
                   console.log(err);
               }else{
-                  Article.findById(req.body.postId,(err,article)=>{
-                        Comment.find({postId:req.body.postId},(err,comments)=>{
-                            req.flash('success','Comment Added');
-                            res.render('article',{
-                                comments:comments,
-                                article:article
-                            });  
-                        });    
-                    });
+                  Article.update({_id:req.body.postId},{ $inc: {totalComments: 1}},(err)=>{
+                      User.update({username:req.user.username},{ $inc: {comments: 1}},(err)=>{
+                        Article.findById(req.body.postId,(err,article)=>{
+                            Comment.find({postId:req.body.postId},(err,comments)=>{
+                                req.flash('success','Comment Added');
+                                console.log(req.user);
+                                res.render('article',{
+                                    comments:comments,
+                                    article:article,
+                                    user:req.user
+                                });  
+                            });
+                        });
+                      });
+                  });
               }
           });
       }

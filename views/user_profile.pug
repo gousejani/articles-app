@@ -1,0 +1,23 @@
+extends layout
+
+block content
+    h2 User Profile
+    ul.list-group
+        li.list-group-item username: #{profile[0].username}
+        li.list-group-item posts: #{profile[0].posts}
+        li.list-group-item comments: #{profile[0].comments}
+    br
+    h3 User Posts
+    ul.list-group
+    each article, i in articles
+        li.list-group-item
+            a.font-weight-bold(href="/articles/"+article._id)=article.title 
+            //- span #{article.totalComments} Comments
+    br
+    h3 User Comments
+    ul.list-group
+    each comment, i in comments
+        li.list-group-item
+            div
+                a.font-weight-light(href="/articles/"+comment.postId)=comment.postTitle 
+            span.font-weight-bold=comment.body

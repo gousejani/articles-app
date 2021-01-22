@@ -9,7 +9,6 @@ const session = require('express-session');
 const config = require('./config/database');
 const passport = require('passport');
 
-
 // mongoose.connect('mongodb://localhost/nodekb');
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -94,15 +93,15 @@ app.set('view engine','pug')
 // Home route
 app.get('/',(req,res)=>{
     Article.find({},(err,articles)=>{
-        if(err){
-            console.log(err);
-        }else{
-            res.render('index',{
-                title:"Articles",
-                articles:articles
-            });
-        }
-        
+      if(err){
+        console.log(err);
+      }else{
+        res.render('index',{
+            title:"Posts",
+            articles:articles,
+            comments:comments
+        });
+      }        
     });
 });
 

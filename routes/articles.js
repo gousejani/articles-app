@@ -34,7 +34,7 @@ router.post('/add',
           });
 
       }else{
-          console.log(req.user);
+        //   console.log(req.user);
           let article = new Article;
           article.title = req.body.title;
           article.author = req.user.username;

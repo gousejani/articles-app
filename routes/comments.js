@@ -10,7 +10,7 @@ const Comment = require('../models/comment')
 // Post Comment 
 router.post('/add',
   (req,res)=>{
-      console.log(req.user);
+    //   console.log(req.user);
       req.checkBody('body','Body is required').notEmpty();
       // get Errors
       const errors = req.validationErrors();
@@ -41,7 +41,7 @@ router.post('/add',
                         Article.findById(req.body.postId,(err,article)=>{
                             Comment.find({postId:req.body.postId},(err,comments)=>{
                                 req.flash('success','Comment Added');
-                                console.log(req.user);
+                                // console.log(req.user);
                                 res.render('article',{
                                     comments:comments,
                                     article:article,

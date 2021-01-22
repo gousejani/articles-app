@@ -6,32 +6,16 @@ html
     link(rel='stylesheet' href='/css/style.css')
 
   body
-    //- nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.navbar-right
-    //-   .container-fluid
-    //-     a.navbar-brand(href='/') ABTMS
-    //-     button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarNavAltMarkup'
-    //-      aria-controls='navbarNavAltMarkup' aria-expanded='false' aria-label='Toggle navigation')
-    //-       span.navbar-toggler-icon
-    //-     #navbarNavAltMarkup.collapse.navbar-collapse
-    //-       .navbar-nav
-    //-         a.nav-link(aria-current='page' href='/') Home
-    //-         if user
-    //-           a.nav-link(href='/articles/add') New Post
-    //-           a.nav-link(href='/users/logout') Logout
-    //-         else
-    //-           a.nav-link(href='/users/register') Register
-    //-           a.nav-link(href='/users/login') Login
-
-    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-2
       .container
-        a.navbar-brand(href='/') ABTMS
+        a.navbar-brand(href='/') 
+          h2 ABTMS
         button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation')
           span.navbar-toggler-icon
-        #navbarNav.nav.navbar-collapse.collapse
-          ul.nav.navbar-nav
+        #navbarNav.nav.navbar-collapse.collapse.justify-content-end
+          ul.nav.navbar-nav.w-100.justify-content-end
             li.nav-item
               a.nav-link(href='/') Home
-          ul.nav.navbar-nav.navbar-right
             if user
               li.nav-item
                 a.nav-link(href='/articles/add') New Post

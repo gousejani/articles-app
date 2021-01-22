@@ -30,30 +30,47 @@ router.post('/register',(req,res)=>{
     if(errors){
         res.render('register',{errors});
     }else{
-        let newUser = new User({
-            email,
-            username,
-            password,
-            posts,
-            comments
-        });
-        bcrypt.genSalt(10, function(err,salt){
-            bcrypt.hash(newUser.password,salt,(err,hash )=>{
-                if(err){
-                    console.log(err);
+        // Check DB for email and user name
+        User.findOne({ 
+            $or: [{
+                email: req.body.email
+            }, {
+                username: req.body.username
+            }]
+         },(err,user)=>{
+            if(user){
+                if (user.username === req.body.username) {
+                    req.flash('danger',"User Name already exists"); 
+                } else {
+                    req.flash('danger',"Email already exists"); 
                 }
-                newUser.password = hash;
-                newUser.save((err)=>{
-                    if(err){
-                        console.log(err);
-                    }else{
-                        req.flash('success','You\'re now registered. Login now!');
-                        res.redirect('/users/login')
-                    }
+                res.render('register');
+            }else{
+                let newUser = new User({
+                    email,
+                    username,
+                    password,
+                    posts,
+                    comments
                 });
-            });
+                bcrypt.genSalt(10, function(err,salt){
+                    bcrypt.hash(newUser.password,salt,(err,hash )=>{
+                        if(err){
+                            console.log(err);
+                        }
+                        newUser.password = hash;
+                        newUser.save((err)=>{
+                            if(err){
+                                console.log(err);
+                            }else{
+                                req.flash('success','You\'re now registered. Login now!');
+                                res.redirect('/users/login')
+                            }
+                        });
+                    });
+                });
+            }
         });
-        
     }
 });
 

@@ -1,15 +1,15 @@
 extends layout
 
 block content
-    h1=article.title
-    p Posted by 
-        a(href="/users/"+article.author) #{article.author}
-    p=article.body
-    hr
-    if user
-        if user.username == article.author
-            a.btn.btn-default.btn-secondary(href="/articles/edit/"+article._id) Edit
-            a.btn.btn-default.btn-danger.delete-article(href='#',data-id=article._id) Delete
+    div.border.p-3.mb-2.border-dark
+        h3=article.title
+        p Posted by 
+            a(href="/users/"+article.author) #{article.author}
+        p=article.body
+        if user
+            if user.username == article.author
+                a.btn.btn-default.btn-outline-primary.mr-2.btn-sm(href="/articles/edit/"+article._id) Edit
+                a.btn.btn-default.btn-outline-danger.delete-article.btn-sm(href='#',data-id=article._id) Delete
     
     if user
         form(method='POST',action="/comments/add/")
@@ -19,11 +19,12 @@ block content
                 input(type='hidden', name = 'postId', value=article._id)
             .form-group
                 input(type='hidden', name = 'postTitle', value=article.title)
-            input.btn.btn-primary(type='submit', value='Add Comment')
+            input.btn.btn-primary.btn-sm(type='submit', value='Add Comment')
     
-    h3 Comments
+    h5.mt-3 Comments
     ul.list-group
         each comment, i in comments
             li.list-group-item
                 p=comment.body
-                p by #{comment.username}
+                p by 
+                    a(href="/users/"+article.author) #{article.author}
